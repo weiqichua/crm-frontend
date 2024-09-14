@@ -1,1 +1,1 @@
-# g2t6-frontend
+# frontend-practice
