@@ -5,18 +5,24 @@ import CssBaseline from '@mui/material/CssBaseline';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
+import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import Divider from '@mui/material/Divider';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import LogoutIcon from '@mui/icons-material/Logout';
+import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
+import { cardClasses } from '@mui/material';
 
 const getUserRole = () => localStorage.getItem('role'); // Example
+
+const drawerWidth = 240;
 
 const routesForAdmin = [
   { text: 'Users', path: '/admin/users', icon: <AddCircleOutlineIcon /> },
@@ -24,12 +30,12 @@ const routesForAdmin = [
 ];
 
 const routesForAgent = [
-  { text: 'Clients', path: '/agent/clients', icon: <ReceiptIcon /> },
+  { text: 'Clientsasd', path: '/agent/clients', icon: <ReceiptIcon /> },
   { text: 'Transactions', path: '/agent/transactions', icon: <ManageAccountsIcon /> },
 ];
 
 export default function Layout() {
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Use the useNavigate hook to get the navigate function
 
   const userRole = getUserRole(); // 'admin' or 'agent'
   const routes = userRole === 'admin' ? routesForAdmin : routesForAgent;
@@ -44,32 +50,54 @@ export default function Layout() {
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar position="fixed">
+      <AppBar position="fixed" >
         <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Typography variant="h6" noWrap component="div">
             {userRole === 'admin' ? 'Admin Dashboard' : 'Agent Dashboard'}
           </Typography>
 
-          <Box sx={{ display: 'flex', justifyContent: 'space-evenly', alignItems: 'center', gap: 1 }}>
-            <List sx={{ display: 'flex', flexDirection: 'row', p: 0 }}>
-              {routes.map((route) => (
-                <ListItem key={route.text} disablePadding sx={{ flex: '1 0 0' }}>
-                  <ListItemButton component={Link} to={route.path}>
-                    <ListItemIcon sx={{ minWidth: '30px' }}>{route.icon}</ListItemIcon> {/* Adjusted icon width */}
-                    <ListItemText primary={route.text} />
-                  </ListItemButton>
-                </ListItem>
-              ))}
-            </List>
-            <Button sx={{ textTransform: 'none', height: 1 }} color="inherit" variant="contained" onClick={handleLogout} endIcon={<LogoutIcon />}>
-              <Typography noWrap component="div">
-                Logout
-              </Typography>
+      <Box sx = {{display: 'flex', justifyContent: 'space-evenly', alignItems: 'center', gap: 1}}>    
+          <Button sx = {{textTransform: 'none', height: 1 }} color="inherit" variant = "contained" onClick={handleLogout} endIcon = {<LogoutIcon />} >
+                <Typography noWrap component="div">
+                  Logout
+                </Typography>
             </Button>
-          </Box>
+      </Box>
+
         </Toolbar>
       </AppBar>
+      
+      <Drawer
+        sx={{
+          width: drawerWidth,
+          flexShrink: 0,
+          '& .MuiDrawer-paper': {
+            width: drawerWidth,
+            boxSizing: 'border-box',
+          },
+        }}
+        variant="permanent"
+        anchor="left"
+      >
+        <Toolbar sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <Typography variant="h6" noWrap component="div">
+            UBS
+          </Typography>
+        </Toolbar>
+        <Divider />
+
+        <List sx={{ display: 'flex', flexDirection: 'column' }}>
+          {routes.map((route) => (
+            <ListItem key={route.text} disablePadding>
+              <ListItemButton component={Link} to={route.path}>
+                <ListItemIcon>{route.icon}</ListItemIcon>
+                <ListItemText primary={route.text} />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
+        <Divider />
+      </Drawer> 
     </Box>
   );
 }
-

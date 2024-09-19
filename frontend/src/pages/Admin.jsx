@@ -1,21 +1,20 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import Layout from '../components/Layout'; // Import the drawer component
+import Layout from '../components/Layout'; // Import the Layout component
 import AdminUsers from './AdminUsers'; // Import the AdminUsers component
 import Box from '@mui/material/Box'; // Import the Box component from MUI
 
 const Admin = () => {
   return (
-    <Box sx={{ display: 'flex' }}> {/* Use MUI Box for the layout */}
-      <Layout />
+    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}> {/* Full viewport height */}
+      <Layout /> {/* Layout (AppBar) is placed here */}
       <Box
-        component="main"
         sx={{
           flexGrow: 1, // Allow the content to grow and fill the space
-          bgcolor: '#f8f9fa', // Background color to cover the entire scrolling area
+          bgcolor: '#fff', // Background color for the main content area
           p: 3,
-          minHeight: '100vh', // Ensure it covers the full viewport height
-          overflow: 'auto', // Enable scrolling if needed
+          overflow: 'auto', // Enable scrolling for the main content area if needed
+          mt: { xs: '56px', sm: '64px' }, // Adjust for the height of the AppBar (56px for mobile, 64px for desktop)
         }}
       >
         <Routes>

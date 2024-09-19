@@ -11,12 +11,11 @@ const mockUsers = [
   { id: 6, name: 'Eve White', email: 'eve@example.com', role: 'Admin' },
   { id: 7, name: 'Frank Green', email: 'frank@example.com', role: 'User' },
   { id: 8, name: 'Grace Black', email: 'grace@example.com', role: 'Admin' },
-  // Add more mock users as needed
 ];
 
 function AdminUsers() {
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
+  const itemsPerPage = 10;
 
   // Calculate the indices for the current page
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -32,7 +31,7 @@ function AdminUsers() {
   };
   
   return (
-    <div className="container-fluid d-flex flex-column vh-100 w-100 mt-5">
+    <div className="container-fluid d-flex flex-column vh-100 w-100 mt-5" style = {{width: '100%'}}>
       <h1>Manage Users</h1>
       <div className="table-responsive">
           <Table striped bordered hover >
