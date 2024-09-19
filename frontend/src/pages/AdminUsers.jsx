@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
-import { Table, Button, Pagination } from 'react-bootstrap';
-import './AdminUsers.css'; // Import the CSS file
+import React from 'react';
+import { DataGrid } from '@mui/x-data-grid';
+import Paper from '@mui/material/Paper';
+import { AppBar, Typography, Toolbar, Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
-const mockUsers = [
+
+const rows = [
   { id: 1, name: 'John Doe', email: 'john@example.com', role: 'Admin' },
   { id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'User' },
   { id: 3, name: 'Bob Johnson', email: 'bob@example.com', role: 'User' },
@@ -13,65 +16,63 @@ const mockUsers = [
   { id: 8, name: 'Grace Black', email: 'grace@example.com', role: 'Admin' },
 ];
 
-function AdminUsers() {
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+const paginationModel = { page: 0, pageSize: 10 };
 
-  // Calculate the indices for the current page
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentUsers = mockUsers.slice(indexOfFirstItem, indexOfLastItem);
-  
-  // Calculate total pages
-  const totalPages = Math.ceil(mockUsers.length / itemsPerPage);
-  
-  // Handle page change
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
-  
+function AdminUsers() {
+
+  const columns = [
+    { field: 'id', headerName: 'ID', width: 70 },
+    { field: 'name', headerName: 'Name', width: 130 },
+    { field: 'email', headerName: 'Email', width: 130 },
+    { field: 'role', headerName: 'Role', width: 90 },
+    {
+      field: 'actions',
+      headerName: 'Actions',
+      width: 100,
+      renderCell: (params) => (
+        <Button
+          variant="contained"
+          size="small"
+          onClick={() => handleEditClick(params.row)}
+        >
+          Edit
+        </Button>
+      ),
+    },
+  ];
+    
+  const navigate = useNavigate();
+  const handleAddUserClick = () => {
+    navigate('/admin/create');;
+  }
+
+  const handleEditClick = (user) => {
+    navigate(`/admin/edit/${user.id}`, {state : {user}});
+  }
+
   return (
-    <div className="container-fluid d-flex flex-column vh-100 w-100 mt-5" style = {{width: '100%'}}>
-      <h1>Manage Users</h1>
-      <div className="table-responsive">
-          <Table striped bordered hover >
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Role</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {currentUsers.map(user => (
-                <tr key={user.id}>
-                  <td>{user.id}</td>
-                  <td>{user.name}</td>
-                  <td>{user.email}</td>
-                  <td>{user.role}</td>
-                  <td>
-                    <Button variant="warning" className="mr-2">Edit</Button>
-                    <Button variant="danger">Delete</Button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-        </div>
-        <Pagination className="justify-content-center mt-3">
-          {[...Array(totalPages)].map((_, index) => (
-            <Pagination.Item
-              key={index + 1}
-              active={index + 1 === currentPage}
-              onClick={() => handlePageChange(index + 1)}
-            >
-              {index + 1}
-            </Pagination.Item>
-          ))}
-        </Pagination>
+    <Paper
+      sx={{
+        height: '75vh',
+        width: '75vw',
+        margin: '0 20em',
+        display: 'flex',
+        flexDirection: 'column',
+        padding: '1em',
+      }}
+    >
+      <div style={{ alignSelf: 'end' }}>
+        <Button variant="contained" onClick={handleAddUserClick}>
+          Add User
+        </Button>
       </div>
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        initialState={{ pagination: { paginationModel } }}
+        sx={{ border: 0, flexGrow: 1 }}
+      />
+    </Paper>
   );
 }
 
