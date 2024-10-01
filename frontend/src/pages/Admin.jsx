@@ -1,29 +1,26 @@
-import React from 'react';
-import { Routes, Route } from 'react-router-dom';
-import Layout from '../components/Layout'; // Import the Layout component
-import AdminUsers from './AdminUsers'; // Import the AdminUsers component
-import Box from '@mui/material/Box'; // Import the Box component from MUI
+// src/pages/Admin.jsx
+
+import { Outlet } from 'react-router-dom';
+import Layout from '../components/Layout'; // Assuming this is your AppBar layout
+import Box from '@mui/material/Box';
 
 const Admin = () => {
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}> {/* Full viewport height */}
-      <Layout /> {/* Layout (AppBar) is placed here */}
+    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+      <Layout />
       <Box
         sx={{
-          flexGrow: 1, // Allow the content to grow and fill the space
+          flexGrow: 1,
           p: 3,
-          overflow: 'auto', // Enable scrolling for the main content area if needed
-          mt: '64px', // Adjust for the height of the AppBar (56px for mobile, 64px for desktop)
+          overflow: 'auto',
+          mt: '64px', // Adjust for AppBar height
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          maxWidth: '100vw'
+          maxWidth: '100vw',
         }}
       >
-        <Routes>
-          <Route path="users" element={<AdminUsers />} />
-          {/* Add other nested routes here */}
-        </Routes>
+        <Outlet /> {/* Renders the matched child route */}
       </Box>
     </Box>
   );

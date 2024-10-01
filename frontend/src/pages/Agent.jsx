@@ -1,14 +1,26 @@
-import React from 'react';
-import Layout from '../components/Layout'; // Import the drawer component
+import { Outlet } from 'react-router-dom';
+import Layout from '../components/Layout'; // Assuming this is your AppBar layout
+import Box from '@mui/material/Box';
 
 const Agent = () => {
   return (
-    <div>
-      <Layout />  
-      <div style={{ marginLeft: '240px', padding: '20px' }}> {/* Offset content by drawer width */}
-        {/* Your dashboard content here */}
-      </div>
-    </div>
+    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+      <Layout />
+      <Box
+        sx={{
+          flexGrow: 1,
+          p: 3,
+          overflow: 'auto',
+          mt: '64px', // Adjust for AppBar height
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          maxWidth: '100vw',
+        }}
+      >
+        <Outlet /> {/* Renders the matched child route */}
+      </Box>
+    </Box>
   );
 };
 

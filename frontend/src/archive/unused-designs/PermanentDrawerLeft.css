@@ -1,0 +1,18 @@
+/* frontend/src/components/PermanentDrawerLeft.css */
+.drawer {
+    width: 240px;
+    flex-shrink: 0;
+  }
+  
+  .drawer .MuiDrawer-paper {
+    width: 240px;
+  }
+  
+  .appBar {
+    width: calc(100% - 240px);
+    margin-left: 240px;
+  }
+  
+  .flexDisplay {
+    display: flex;
+  }

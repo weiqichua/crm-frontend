@@ -1,78 +1,82 @@
-import React from 'react';
-import { DataGrid } from '@mui/x-data-grid';
-import Paper from '@mui/material/Paper';
-import { AppBar, Typography, Toolbar, Button } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-
-
-const rows = [
-  { id: 1, name: 'John Doe', email: 'john@example.com', role: 'Admin' },
-  { id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'User' },
-  { id: 3, name: 'Bob Johnson', email: 'bob@example.com', role: 'User' },
-  { id: 4, name: 'Alice Brown', email: 'alice@example.com', role: 'Admin' },
-  { id: 5, name: 'Charlie Davis', email: 'charlie@example.com', role: 'User' },
-  { id: 6, name: 'Eve White', email: 'eve@example.com', role: 'Admin' },
-  { id: 7, name: 'Frank Green', email: 'frank@example.com', role: 'User' },
-  { id: 8, name: 'Grace Black', email: 'grace@example.com', role: 'Admin' },
-];
-
-const paginationModel = { page: 0, pageSize: 10 };
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Container,
+} from '@mui/material';
 
 function AdminUsers() {
-
-  const columns = [
-    { field: 'id', headerName: 'ID', width: 70 },
-    { field: 'name', headerName: 'Name', width: 130 },
-    { field: 'email', headerName: 'Email', width: 130 },
-    { field: 'role', headerName: 'Role', width: 90 },
-    {
-      field: 'actions',
-      headerName: 'Actions',
-      width: 100,
-      renderCell: (params) => (
-        <Button
-          variant="contained"
-          size="small"
-          onClick={() => handleEditClick(params.row)}
-        >
-          Edit
-        </Button>
-      ),
-    },
+  // Sample user data
+  const users = [
+    { id: '1234', firstName: 'John', lastName: 'Smith', email: 'johnsmith@email.com', role: 'Admin' },
+    { id: '0000', firstName: 'Tom', lastName: 'Smith', email: 'tomsmith@email.com', role: 'Agent' },
+    // Add more users as needed
   ];
-    
-  const navigate = useNavigate();
-  const handleAddUserClick = () => {
-    navigate('/admin/create');;
-  }
-
-  const handleEditClick = (user) => {
-    navigate(`/admin/edit/${user.id}`, {state : {user}});
-  }
 
   return (
-    <Paper
-      sx={{
-        height: '75vh',
-        width: '75vw',
-        margin: '0 20em',
-        display: 'flex',
-        flexDirection: 'column',
-        padding: '1em',
-      }}
-    >
-      <div style={{ alignSelf: 'end' }}>
-        <Button variant="contained" onClick={handleAddUserClick}>
-          Add User
+    <>
+      {/* App Bar */}
+      <AppBar position="static" color="primary">
+        <Toolbar>
+          <Typography variant="h6" sx={{ flexGrow: 1 }}>
+            Admin Dashboard
+          </Typography>
+          <Button color="inherit">Users</Button>
+          <Button color="inherit">Logs</Button>
+          <Button color="inherit">Logout</Button>
+        </Toolbar>
+      </AppBar>
+
+      {/* Main Content */}
+      <Container sx={{ mt: 4 }}>
+        <Typography variant="h5" gutterBottom>
+          Users
+        </Typography>
+        <Button variant="contained" color="primary" sx={{ mb: 2 }}>
+          ADD USER
         </Button>
-      </div>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        initialState={{ pagination: { paginationModel } }}
-        sx={{ border: 0, flexGrow: 1 }}
-      />
-    </Paper>
+
+        {/* User Table */}
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>ID</TableCell>
+                <TableCell>First Name</TableCell>
+                <TableCell>Last Name</TableCell>
+                <TableCell>Email</TableCell>
+                <TableCell>Role</TableCell>
+                <TableCell>Actions</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {users.map((user, index) => (
+                <TableRow key={index}>
+                  <TableCell>{user.id}</TableCell>
+                  <TableCell>{user.firstName}</TableCell>
+                  <TableCell>{user.lastName}</TableCell>
+                  <TableCell>{user.email}</TableCell>
+                  <TableCell>{user.role}</TableCell>
+                  <TableCell>
+                    <Button variant="contained" color="primary">
+                      VIEW MORE
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Container>
+    </>
   );
 }
 

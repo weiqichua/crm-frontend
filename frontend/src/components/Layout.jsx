@@ -1,70 +1,47 @@
-import React from 'react';
+// src/components/Layout.jsx
+import { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import Box from '@mui/material/Box';
-import CssBaseline from '@mui/material/CssBaseline';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
-import ReceiptIcon from '@mui/icons-material/Receipt';
+import { Box, AppBar, Toolbar, Typography, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Button } from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
-import Button from '@mui/material/Button';
-
-const getUserRole = () => localStorage.getItem('role'); // Example
-
-const routesForAdmin = [
-  { text: 'Users', path: '/admin/users', icon: <AddCircleOutlineIcon /> },
-  { text: 'Transactions', path: '/admin/transactions', icon: <ManageAccountsIcon /> },
-];
-
-const routesForAgent = [
-  { text: 'Clients', path: '/agent/clients', icon: <ReceiptIcon /> },
-  { text: 'Transactions', path: '/agent/transactions', icon: <ManageAccountsIcon /> },
-];
+import { AuthContext } from '../contexts/AuthContext';
+import { routesForAdmin, routesForAgent } from '../components/Routes';
 
 export default function Layout() {
+  const { user, logout } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const userRole = getUserRole(); // 'admin' or 'agent'
-  const routes = userRole === 'admin' ? routesForAdmin : routesForAgent;
+  const routes = user.role === 'admin' ? routesForAdmin : routesForAgent;
 
   const handleLogout = () => {
-    // Clear user session or token here, if applicable
-    localStorage.removeItem('role'); // Example of clearing user role
-    localStorage.removeItem('token'); // Clear token if stored
+    logout();
     navigate('/'); // Redirect to login page
   };
 
   return (
-    <Box sx={{ display: 'flex' }}>
-      <CssBaseline />
+    <Box sx={{ flexGrow: 1 }}>
       <AppBar position="fixed">
         <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Typography variant="h6" noWrap component="div">
-            {userRole === 'admin' ? 'Admin Dashboard' : 'Agent Dashboard'}
+            {user.role === 'admin' ? 'Admin Dashboard' : 'Agent Dashboard'}
           </Typography>
-
-          <Box sx={{ display: 'flex', justifyContent: 'space-evenly', alignItems: 'center', gap: 1 }}>
-            <List sx={{ display: 'flex', flexDirection: 'row', p: 0 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <List sx={{ display: 'flex', flexDirection: 'row', p: 0, m: 0 }}>
               {routes.map((route) => (
-                <ListItem key={route.text} disablePadding sx={{ flex: '1 0 0' }}>
+                <ListItem key={route.text} disablePadding>
                   <ListItemButton component={Link} to={route.path}>
-                    <ListItemIcon sx={{ minWidth: '30px' }}>{route.icon}</ListItemIcon> {/* Adjusted icon width */}
+                    <ListItemIcon sx={{ minWidth: '30px' }}>{route.icon}</ListItemIcon>
                     <ListItemText primary={route.text} />
                   </ListItemButton>
                 </ListItem>
               ))}
             </List>
-            <Button sx={{ textTransform: 'none', height: 1 }} color="inherit" variant="contained" onClick={handleLogout} endIcon={<LogoutIcon />}>
-              <Typography noWrap component="div">
-                Logout
-              </Typography>
+            <Button
+              color="inherit"
+              variant="outlined"
+              onClick={handleLogout}
+              endIcon={<LogoutIcon />}
+            >
+              Logout
             </Button>
           </Box>
         </Toolbar>
@@ -72,4 +49,3 @@ export default function Layout() {
     </Box>
   );
 }
-
