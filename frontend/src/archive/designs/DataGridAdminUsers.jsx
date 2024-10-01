@@ -18,53 +18,43 @@ const initialRows = [
 function AdminUsers() {
   const navigate = useNavigate();
 
-  // State for pagination
   const [rows, setRows] = useState(initialRows);
-  const [page, setPage] = useState(0); // Current page index
-  const [pageSize, setPageSize] = useState(5); // Number of rows per page
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(5);
 
   const handleAddUserClick = () => {
-    navigate('create'); // Relative path
+    navigate('create');
   };
 
   const handleEditClick = (user) => {
     navigate(`edit/${user.id}`, { state: { user } });
   };
 
-  const handleDeleteClick = (user) => {
-    const updatedRows = rows.filter((row) => row.id !== user.id);
+  const handleDeleteClick = (userId) => {
+    const updatedRows = rows.filter((row) => row.id !== userId);
     setRows(updatedRows);
-  }
-  
+  };
 
   const columns = [
-    { field: 'id', headerName: 'ID', width: 70 },
-    { field: 'name', headerName: 'Name', width: 130 },
-    { field: 'email', headerName: 'Email', width: 130 },
-    { field: 'role', headerName: 'Role', width: 90 },
+    { field: 'id', headerName: 'ID', width: 100 },
+    { field: 'name', headerName: 'Name', width: 180 },
+    { field: 'email', headerName: 'Email', width: 220 },
+    { field: 'role', headerName: 'Role', width: 120 },
     {
       field: 'actions',
-      headerName: 'Actions',
-      width: 200,
+      headerName: '',
+      width: 150,
       renderCell: (params) => (
-        <Box >
+        <Box sx={{ display: 'flex', justifyContent: 'center' , width: '100%' }}>
           <Button
-            sx = {{mr: 1}}
             variant="contained"
             size="small"
             onClick={() => handleEditClick(params.row)}
           >
-            Edit
+            View More
           </Button>
-          <Button 
-            variant="contained"
-            size="small"
-            onClick={() => handleDeleteClick(params.row.id)}
-            >
-              Delete
-            </Button>
         </Box>
-      ),      
+      ),
     },
   ];
 
@@ -79,7 +69,7 @@ function AdminUsers() {
         padding: '1em',
       }}
     >
-      <div style={{ alignSelf: 'end' }}>
+      <div style={{ alignSelf: 'end', marginBottom: '1em' }}>
         <Button variant="contained" onClick={handleAddUserClick}>
           Add User
         </Button>
@@ -89,13 +79,33 @@ function AdminUsers() {
         columns={columns}
         pageSize={pageSize}
         page={page}
-        onPageChange={(newPage) => setPage(newPage)} // Handle page change
-        onPageSizeChange={(newPageSize) => setPageSize(newPageSize)} // Handle page size change
-        pageSizeOptions={[10]} // Add pageSizeOptions prop
-        initialState={ {
-          pagination: { paginationModel: {pageSize: 10}}
+        onPageChange={(newPage) => setPage(newPage)}
+        onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+        pageSizeOptions={[10]}
+        initialState={{
+          pagination: { paginationModel: { pageSize: 10 } },
         }}
-        sx={{ border: 0, flexGrow: 1, marginTop: '1em' }}
+        sx={{
+          border: 0,
+          flexGrow: 1,
+          marginTop: '1em',
+          '& .MuiDataGrid-columnHeaders': {
+            backgroundColor: '#f5f5f5',
+            fontSize: '1rem',
+            fontWeight: 'bold',
+          },
+          '& .MuiDataGrid-cell': {
+            justifyContent: 'center',
+            padding: '10px',
+          },
+          '& .MuiDataGrid-footerContainer': {
+            justifyContent: 'flex-end',
+            paddingRight: '1em',
+          },
+          '& .MuiDataGrid-cell--textLeft': {
+            textAlign: 'left',
+          },
+        }}
       />
     </Paper>
   );
