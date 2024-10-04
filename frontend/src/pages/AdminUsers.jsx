@@ -1,155 +1,113 @@
-import React from 'react';
-import {
-  Typography,
-  Button,
-  Container,
-  Box,
-} from '@mui/material';
-import { useTable } from 'react-table';
-import PropTypes from 'prop-types';
+import { useState } from 'react';
+import { DataGrid } from '@mui/x-data-grid';
+import Paper from '@mui/material/Paper';
+import { Button, Box } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
-// Sample user data
-const data = [
-  { id: '1234', firstName: 'John', lastName: 'Smith', email: 'johnsmith@email.com', role: 'Admin' },
-  { id: '0000', firstName: 'Tom', lastName: 'Smith', email: 'tomsmith@email.com', role: 'Agent' },
-  // Add more users as needed
+const initialRows = [
+  { id: 1, name: 'John Doe', email: 'john@example.com', role: 'Admin' },
+  { id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'User' },
+  { id: 3, name: 'Bob Johnson', email: 'bob@example.com', role: 'User' },
+  { id: 4, name: 'Alice Brown', email: 'alice@example.com', role: 'Admin' },
+  { id: 5, name: 'Charlie Davis', email: 'charlie@example.com', role: 'User' },
+  { id: 6, name: 'Eve White', email: 'eve@example.com', role: 'Admin' },
+  { id: 7, name: 'Frank Green', email: 'frank@example.com', role: 'User' },
+  { id: 8, name: 'Grace Black', email: 'grace@example.com', role: 'Admin' },
+  { id: 9, name: 'Grace Black', email: 'grace@example.com', role: 'Admin' },
+  { id: 10, name: 'Grace Black', email: 'grace@example.com', role: 'Admin' },
+  { id: 11, name: 'Grace Black', email: 'grace@example.com', role: 'Admin' },
+
+
 ];
-
-// Define the columns for React Table
-const columns = [
-  {
-    Header: 'ID',
-    accessor: 'id',
-  },
-  {
-    Header: 'First Name',
-    accessor: 'firstName',
-  },
-  {
-    Header: 'Last Name',
-    accessor: 'lastName',
-  },
-  {
-    Header: 'Email',
-    accessor: 'email',
-  },
-  {
-    Header: 'Role',
-    accessor: 'role',
-  },
-  {
-    Header: 'Actions',
-    Cell: ({ row }) => <ViewMoreButton row={row} />,
-  },
-];
-
-// Custom Button Component
-const ViewMoreButton = ({ row }) => (
-  <Button
-    variant="contained"
-    color="primary"
-    onClick={() => alert(`Viewing user ${row.original.firstName} ${row.original.lastName}`)}
-  >
-    VIEW MORE
-  </Button>
-);
-
-ViewMoreButton.propTypes = {
-  row: PropTypes.shape({
-    original: PropTypes.shape({
-      firstName: PropTypes.string.isRequired,
-      lastName: PropTypes.string.isRequired,
-      id: PropTypes.string.isRequired,
-      email: PropTypes.string.isRequired,
-      role: PropTypes.string.isRequired,
-    }).isRequired,
-  }).isRequired,
-};
 
 function AdminUsers() {
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({
-    columns,
-    data,
-  });
+  const navigate = useNavigate();
 
-  return (
-    <Box
-      sx={{
-        height: '100vh', // Full viewport height
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'column',
-      }}
-    >
-      <Container>
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            backgroundColor: '#f5f5f5',
-            padding: 2,
-            borderRadius: 1,
-            boxShadow: 3,
-            mb: 2,
-          }}
-        >
-          <Typography variant="h5" gutterBottom>
-            Users
-          </Typography>
-          <Button variant="contained" color="primary">
-            ADD USER
+  const [rows, setRows] = useState(initialRows);
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(5);
+
+  const handleAddUserClick = () => {
+    navigate('create');
+  };
+
+  const handleViewClick = (user) => {
+    navigate(`view/${user.id}`, { state: { user } });
+  };
+
+  const columns = [
+    { field: 'id', headerName: 'ID', width: 100 },
+    { field: 'name', headerName: 'Name', width: 180 },
+    { field: 'email', headerName: 'Email', width: 220 },
+    { field: 'role', headerName: 'Role', width: 120 },
+    {
+      field: 'actions',
+      headerName: '',
+      width: 150,
+      renderCell: (params) => (
+        <Box sx={{ display: 'flex', justifyContent: 'center' , width: '100%' }}>
+          <Button
+            variant="contained"
+            size="small"
+            onClick={() => handleViewClick(params.row)}
+          >
+            View More
           </Button>
         </Box>
+      ),
+    },
+  ];
 
-        {/* React Table */}
-        <table {...getTableProps()} style={{ width: '100%', borderCollapse: 'collapse' }}>
-          <thead>
-            {headerGroups.map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()} key={headerGroup.id}>
-                {headerGroup.headers.map((column) => (
-                  <th
-                    {...column.getHeaderProps()}
-                    key={column.id}
-                    style={{
-                      borderBottom: '1px solid black',
-                      backgroundColor: '#f5f5f5',
-                      padding: '10px',
-                      textAlign: 'left',
-                    }}
-                  >
-                    {column.render('Header')}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody {...getTableBodyProps()}>
-            {rows.map((row) => {
-              prepareRow(row);
-              return (
-                <tr {...row.getRowProps()} key={row.id}>
-                  {row.cells.map((cell) => (
-                    <td
-                      {...cell.getCellProps()}
-                      key={cell.column.id}
-                      style={{
-                        padding: '10px',
-                        borderBottom: '1px solid black',
-                      }}
-                    >
-                      {cell.render('Cell')}
-                    </td>
-                  ))}
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </Container>
-    </Box>
+  return (
+    <Paper
+      sx={{
+        // height: '85vh',
+        width: '100vw',
+        margin: '0 auto',
+        display: 'flex',
+        flexDirection: 'column',
+        padding: '1em',
+      }}
+    >
+      <div style={{ alignSelf: 'end', marginBottom: '1em' }}>
+        <Button variant="contained" onClick={handleAddUserClick}>
+          Add User
+        </Button>
+      </div>
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        pageSize={pageSize}
+        page={page}
+        onPageChange={(newPage) => setPage(newPage)}
+        onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+        pageSizeOptions={[10]}
+        initialState={{
+          pagination: { paginationModel: { pageSize: 10 } },
+        }}
+        sx={{
+          border: 0,
+          flexGrow: 1,
+          marginTop: '1em',
+          '& .MuiDataGrid-columnHeaders': {
+            backgroundColor: '#f5f5f5',
+            fontSize: '1rem',
+            fontWeight: 'bold',
+          },
+          '& .MuiDataGrid-cell': {
+            justifyContent: 'center',
+            padding: '10px',
+          },
+          '& .MuiDataGrid-footerContainer': {
+            justifyContent: 'flex-end',
+            paddingRight: '1em',
+          },
+          '& .MuiDataGrid-cell--textLeft': {
+            textAlign: 'left',
+          },
+        }}
+      />
+    </Paper>
   );
 }
 

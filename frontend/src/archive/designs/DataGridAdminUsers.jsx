@@ -19,6 +19,7 @@ function AdminUsers() {
   const navigate = useNavigate();
 
   const [rows, setRows] = useState(initialRows);
+
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(5);
 
@@ -26,13 +27,8 @@ function AdminUsers() {
     navigate('create');
   };
 
-  const handleEditClick = (user) => {
-    navigate(`edit/${user.id}`, { state: { user } });
-  };
-
-  const handleDeleteClick = (userId) => {
-    const updatedRows = rows.filter((row) => row.id !== userId);
-    setRows(updatedRows);
+  const handleViewClick = (user) => {
+    navigate(`view/${user.id}`, { state: { user } });
   };
 
   const columns = [
@@ -49,7 +45,7 @@ function AdminUsers() {
           <Button
             variant="contained"
             size="small"
-            onClick={() => handleEditClick(params.row)}
+            onClick={() => handleViewClick(params.row)}
           >
             View More
           </Button>
