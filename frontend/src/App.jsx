@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Admin from './pages/Admin';
 import AdminUsers from './pages/AdminUsers';
 import CreateUser from './pages/CreateUser';
-import EditUser from './pages/EditUser';
+import ViewUser from './pages/ViewUser';
 import Agent from './pages/Agent';
 import Login from './pages/Login';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -24,7 +24,7 @@ function App() {
             <Route path="/admin" element={<Admin />}>
               <Route path="users" element={<AdminUsers />} />
               <Route path="users/create" element={<CreateUser />} />
-              <Route path="users/edit/:id" element={<EditUser />} />
+              <Route path="users/view/:id" element={<ViewUser />} />
               {/* Add other admin routes here */}
             </Route>
           </Route>

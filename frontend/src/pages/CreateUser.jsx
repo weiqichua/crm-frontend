@@ -1,58 +1,96 @@
-// src/pages/CreateUser.jsx
-
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Paper, TextField, Button, Typography } from '@mui/material';
+import { Paper, TextField, Button, Typography, Box, MenuItem } from '@mui/material';
+
+const roles = ['Admin', 'Agent']; // Example roles for the dropdown
 
 function CreateUser() {
   const navigate = useNavigate();
-  const [user, setUser] = useState({ name: '', email: '', role: '' });
+  const [user, setUser] = useState({
+    firstName: '',
+    lastName: '',
+    role: '',
+    email: '',
+  });
 
   const handleChange = (e) => {
-    setUser({ ...user, [e.target.name]: e.target.value });
+    setUser({
+      ...user,
+      [e.target.name]: e.target.value,
+    });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     // Implement user creation logic here
-    // For now, we'll just log the user data
     console.log('User created:', user);
     navigate('/admin/users');
   };
 
+  const handleCancel = () => {
+    navigate('/admin/users');
+  };
+
   return (
-    <Paper sx={{ padding: '2em', width: '50%', margin: '0 auto' }}>
-      <Typography variant="h5" gutterBottom>
-        Create New User
+    <Paper sx={{ padding: '2em', maxWidth: 600, margin: '2em auto' }}>
+      <Typography variant="h5" component="h2" gutterBottom>
+        Add User
       </Typography>
       <form onSubmit={handleSubmit}>
-        <TextField
-          label="Name"
-          name="name"
-          value={user.name}
-          onChange={handleChange}
-          fullWidth
-          sx={{ marginBottom: '1em' }}
-        />
-        <TextField
-          label="Email"
-          name="email"
-          value={user.email}
-          onChange={handleChange}
-          fullWidth
-          sx={{ marginBottom: '1em' }}
-        />
-        <TextField
-          label="Role"
-          name="role"
-          value={user.role}
-          onChange={handleChange}
-          fullWidth
-          sx={{ marginBottom: '1em' }}
-        />
-        <Button variant="contained" type="submit">
-          Create User
-        </Button>
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(2, 1fr)',
+            gap: 2,
+            mb: 3,
+          }}
+        >
+          <TextField
+            label="First Name"
+            name="firstName"
+            value={user.firstName}
+            onChange={handleChange}
+            required
+          />
+          <TextField
+            label="Last Name"
+            name="lastName"
+            value={user.lastName}
+            onChange={handleChange}
+            required
+          />
+          <TextField
+            select
+            label="Role"
+            name="role"
+            value={user.role}
+            onChange={handleChange}
+            required
+          >
+            {roles.map((role) => (
+              <MenuItem key={role} value={role}>
+                {role}
+              </MenuItem>
+            ))}
+          </TextField>
+          <TextField
+            label="Email"
+            name="email"
+            type="email"
+            value={user.email}
+            onChange={handleChange}
+            required
+          />
+        </Box>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-start', gap: 2 }}>
+          <Button variant="contained" type="submit">
+            Add User
+          </Button>
+          <Button variant="outlined" onClick={handleCancel}>
+            Cancel
+          </Button>
+        </Box>
       </form>
     </Paper>
   );

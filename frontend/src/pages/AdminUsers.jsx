@@ -5,19 +5,17 @@ import { Button, Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 const initialRows = [
-  { id: 1, name: 'John Doe', email: 'john@example.com', role: 'Admin' },
-  { id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'User' },
-  { id: 3, name: 'Bob Johnson', email: 'bob@example.com', role: 'User' },
-  { id: 4, name: 'Alice Brown', email: 'alice@example.com', role: 'Admin' },
-  { id: 5, name: 'Charlie Davis', email: 'charlie@example.com', role: 'User' },
-  { id: 6, name: 'Eve White', email: 'eve@example.com', role: 'Admin' },
-  { id: 7, name: 'Frank Green', email: 'frank@example.com', role: 'User' },
-  { id: 8, name: 'Grace Black', email: 'grace@example.com', role: 'Admin' },
-  { id: 9, name: 'Grace Black', email: 'grace@example.com', role: 'Admin' },
-  { id: 10, name: 'Grace Black', email: 'grace@example.com', role: 'Admin' },
-  { id: 11, name: 'Grace Black', email: 'grace@example.com', role: 'Admin' },
-
-
+  { id: 1, firstName: 'John', lastName: 'Doe', email: 'john@example.com', role: 'Admin' },
+  { id: 2, firstName: 'Jane', lastName: 'Smith', email: 'jane@example.com', role: 'Admin' },
+  { id: 3, firstName: 'Bob', lastName: 'Johnson', email: 'bob@example.com', role: 'Admin' },
+  { id: 4, firstName: 'Alice', lastName: 'Brown', email: 'alice@example.com', role: 'Admin' },
+  { id: 5, firstName: 'Charlie', lastName: 'Davis', email: 'charlie@example.com', role: 'Admin' },
+  { id: 6, firstName: 'Eve', lastName: 'White', email: 'eve@example.com', role: 'Admin' },
+  { id: 7, firstName: 'Frank', lastName: 'Green', email: 'frank@example.com', role: 'Admin' },
+  { id: 8, firstName: 'Grace', lastName: 'Black', email: 'grace@example.com', role: 'Agent' },
+  { id: 9, firstName: 'Grace', lastName: 'Black', email: 'grace@example.com', role: 'Agent' },
+  { id: 10, firstName: 'Grace', lastName: 'Black', email: 'grace@example.com', role: 'Agent' },
+  { id: 11, firstName: 'Grace', lastName: 'Black', email: 'grace@example.com', role: 'Agent' },
 ];
 
 function AdminUsers() {
@@ -32,25 +30,24 @@ function AdminUsers() {
   };
 
   const handleViewClick = (user) => {
+    // Passing the specific user row data to the ViewUser page
     navigate(`view/${user.id}`, { state: { user } });
   };
 
   const columns = [
     { field: 'id', headerName: 'ID', width: 100 },
-    { field: 'name', headerName: 'Name', width: 180 },
+    { field: 'firstName', headerName: 'First Name', width: 150 },
+    { field: 'lastName', headerName: 'Last Name', width: 150 },
     { field: 'email', headerName: 'Email', width: 220 },
     { field: 'role', headerName: 'Role', width: 120 },
     {
-      field: 'actions',
-      headerName: '',
-      width: 150,
+      field: 'actions', headerName: '', width: 150,
       renderCell: (params) => (
-        <Box sx={{ display: 'flex', justifyContent: 'center' , width: '100%' }}>
+        <Box sx={{ display: 'flex', justifyContent: 'center' , width: '100%'}}>
           <Button
             variant="contained"
             size="small"
-            onClick={() => handleViewClick(params.row)}
-          >
+            onClick={() => handleViewClick(params.row)}>
             View More
           </Button>
         </Box>
@@ -61,19 +58,19 @@ function AdminUsers() {
   return (
     <Paper
       sx={{
-        // height: '85vh',
+        height: '80vh',
         width: '100vw',
         margin: '0 auto',
         display: 'flex',
         flexDirection: 'column',
-        padding: '1em',
       }}
     >
-      <div style={{ alignSelf: 'end', marginBottom: '1em' }}>
+      <div style={{ alignSelf: 'end' }}>
         <Button variant="contained" onClick={handleAddUserClick}>
           Add User
         </Button>
       </div>
+
       <DataGrid
         rows={rows}
         columns={columns}
@@ -82,13 +79,14 @@ function AdminUsers() {
         onPageChange={(newPage) => setPage(newPage)}
         onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
         pageSizeOptions={[10]}
+        rowHeight={42}
         initialState={{
           pagination: { paginationModel: { pageSize: 10 } },
         }}
         sx={{
+          height: '520px',
           border: 0,
           flexGrow: 1,
-          marginTop: '1em',
           '& .MuiDataGrid-columnHeaders': {
             backgroundColor: '#f5f5f5',
             fontSize: '1rem',
