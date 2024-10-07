@@ -38,8 +38,8 @@ const userService = {
     }
   },
 
-  // Update a user profile
-  updateUser: async (userId) => {
+  // Disable a user profile
+  disableUser: async (userId) => {
     try {
       const response = await axios.patch(`${BASE_URL}/${userId}/disable`);
       return {
