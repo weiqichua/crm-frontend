@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
-import { Paper, TextField, Button, Typography, Box, MenuItem } from '@mui/material';
 import { useNavigate, useLocation } from 'react-router-dom';
-import Divider from '@mui/material/Divider';
+import { Paper, TextField, Button, Typography, Box, MenuItem, Divider } from '@mui/material';
+import { useUsers } from '../contexts/UsersContext';
 
-const roles = ['Admin', 'User', 'Agent']; // Example roles for the dropdown
+const roles = ['Admin', 'Agent'];
 
 function ViewUser() {
+  const { updateUserInList } = useUsers(); // Access update function from context
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -17,11 +18,13 @@ function ViewUser() {
     email: '',
   });
 
-  const [isEditable, setIsEditable] = useState(false); // Toggle to control edit mode
+  const [originalUser, setOriginalUser] = useState(null);
+  const [isEditable, setIsEditable] = useState(false);
 
   useEffect(() => {
     if (location.state?.user) {
-      setUser(location.state.user); // Set the user data from the passed location state
+      setUser(location.state.user);
+      setOriginalUser(location.state.user);
     }
   }, [location.state]);
 
@@ -32,52 +35,42 @@ function ViewUser() {
     });
   };
 
-  const handleEditToggle = () => {
-    setIsEditable((prev) => !prev); // Toggle between editable and read-only mode
-  };
-
   const handleSave = () => {
-    // Implement save logic here
-    console.log('User updated:', user);
-    setIsEditable(false); // Set back to read-only after saving
+    updateUserInList(user); // Update user in context
+    setIsEditable(false);
+    // navigate('/admin/users'); // Navigate back to AdminUsers
   };
 
   const handleCancel = () => {
-    // Reset any changes and return to view mode
+    setUser(originalUser); // Revert changes
     setIsEditable(false);
   };
 
-  const handleDisable = () => {
-    // Implement disable user logic here
+  const handleDisableUser = () => {
     console.log('User disabled:', user);
-  };
-
-  const handleBack = () => {
-    navigate(-1); // Go back to the previous page
+    // Implement user disable logic here
   };
 
   return (
     <Paper sx={{ padding: '2em', maxWidth: 800, margin: '2em auto' }}>
-      {/* Top Buttons */}
-      <Box sx={{ display: 'flex', justifyContent: 'flex-start', gap: 2, mb: 1 }}>
-        <Button variant="outlined" onClick={handleBack}>
+      {/* Top Section with Back Button */}
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
+        <Button variant="outlined" onClick={() => navigate(-1)}>
           Back
         </Button>
-        <Button variant="contained" color="secondary">
-          User Details
-        </Button>
       </Box>
-      <Divider component="div" />
 
-      {/* User ID and Name Display */}
-      <Box sx={{ display: 'flex', mb: 2 }}>
-        <Typography variant="h6" sx={{ mr: 2 }}>
-          User ID: {user.id}
+      {/* User ID and Name */}
+      <Box sx={{ mb: 2, display:'flex', flexDirection: 'row', gap: 2 }}>
+        <Typography variant="subtitle1" sx={{ mb: 1 }}>
+          <strong>ID:</strong> {user.id}
         </Typography>
-        <Typography variant="h6">
-          Name: {user.firstName} {user.lastName}
+        <Typography variant="subtitle1">
+          <strong>Name:</strong> {user.firstName} {user.lastName}
         </Typography>
       </Box>
+
+      <Divider component="div" sx={{ mb: 2 }} />
 
       {/* Form Fields */}
       <Box
@@ -138,6 +131,7 @@ function ViewUser() {
         />
       </Box>
 
+
       {/* Action Buttons */}
       <Box sx={{ display: 'flex', justifyContent: 'flex-start', gap: 2, mt: 4 }}>
         {isEditable ? (
@@ -150,14 +144,14 @@ function ViewUser() {
             </Button>
           </>
         ) : (
-          <Button variant="contained" color="primary" onClick={handleEditToggle}>
-            Edit
-          </Button>
-        )}
-        {!isEditable && (
-          <Button variant="contained" color="error" onClick={handleDisable}>
-            Disable User
-          </Button>
+          <>
+            <Button variant="contained" color="primary" onClick={() => setIsEditable(true)}>
+              Edit
+            </Button>
+            <Button variant="contained" color="error" onClick={handleDisableUser}>
+              Disable User
+            </Button>
+          </>
         )}
       </Box>
     </Paper>

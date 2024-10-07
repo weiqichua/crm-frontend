@@ -1,38 +1,23 @@
-import { useState } from 'react';
+import { Button, Box, Paper, Typography } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
-import Paper from '@mui/material/Paper';
-import { Button, Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-
-const initialRows = [
-  { id: 1, firstName: 'John', lastName: 'Doe', email: 'john@example.com', role: 'Admin' },
-  { id: 2, firstName: 'Jane', lastName: 'Smith', email: 'jane@example.com', role: 'Admin' },
-  { id: 3, firstName: 'Bob', lastName: 'Johnson', email: 'bob@example.com', role: 'Admin' },
-  { id: 4, firstName: 'Alice', lastName: 'Brown', email: 'alice@example.com', role: 'Admin' },
-  { id: 5, firstName: 'Charlie', lastName: 'Davis', email: 'charlie@example.com', role: 'Admin' },
-  { id: 6, firstName: 'Eve', lastName: 'White', email: 'eve@example.com', role: 'Admin' },
-  { id: 7, firstName: 'Frank', lastName: 'Green', email: 'frank@example.com', role: 'Admin' },
-  { id: 8, firstName: 'Grace', lastName: 'Black', email: 'grace@example.com', role: 'Agent' },
-  { id: 9, firstName: 'Grace', lastName: 'Black', email: 'grace@example.com', role: 'Agent' },
-  { id: 10, firstName: 'Grace', lastName: 'Black', email: 'grace@example.com', role: 'Agent' },
-  { id: 11, firstName: 'Grace', lastName: 'Black', email: 'grace@example.com', role: 'Agent' },
-];
+import { useUsers } from '../contexts/UsersContext';
 
 function AdminUsers() {
+  const { users } = useUsers(); // Fetch users from context
   const navigate = useNavigate();
 
-  const [rows, setRows] = useState(initialRows);
-  const [page, setPage] = useState(0);
-  const [pageSize, setPageSize] = useState(5);
+  const handleViewClick = (user) => {
+    // Navigate to ViewUser with the selected user
+    navigate(`/admin/users/view/${user.id}`, {
+      state: { user },
+    });
+  };
 
   const handleAddUserClick = () => {
-    navigate('create');
-  };
-
-  const handleViewClick = (user) => {
-    // Passing the specific user row data to the ViewUser page
-    navigate(`view/${user.id}`, { state: { user } });
-  };
+    // Navigate to the create user page
+    navigate('/admin/users/create');
+  };  
 
   const columns = [
     { field: 'id', headerName: 'ID', width: 100 },
@@ -41,13 +26,16 @@ function AdminUsers() {
     { field: 'email', headerName: 'Email', width: 220 },
     { field: 'role', headerName: 'Role', width: 120 },
     {
-      field: 'actions', headerName: '', width: 150,
+      field: 'actions',
+      headerName: 'Actions',
+      width: 150,
       renderCell: (params) => (
-        <Box sx={{ display: 'flex', justifyContent: 'center' , width: '100%'}}>
+        <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
           <Button
             variant="contained"
             size="small"
-            onClick={() => handleViewClick(params.row)}>
+            onClick={() => handleViewClick(params.row)}
+          >
             View More
           </Button>
         </Box>
@@ -59,32 +47,28 @@ function AdminUsers() {
     <Paper
       sx={{
         height: '80vh',
-        width: '100vw',
+        width: '100%',
         margin: '0 auto',
         display: 'flex',
         flexDirection: 'column',
       }}
     >
-      <div style={{ alignSelf: 'end' }}>
+
+      {/* Add User Button Section */}
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', padding: '1rem' }}>
+        <Typography variant='h5'>Users</Typography>
         <Button variant="contained" onClick={handleAddUserClick}>
           Add User
         </Button>
-      </div>
+      </Box>
 
       <DataGrid
-        rows={rows}
+        rows={users}
         columns={columns}
-        pageSize={pageSize}
-        page={page}
-        onPageChange={(newPage) => setPage(newPage)}
-        onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-        pageSizeOptions={[10]}
-        rowHeight={42}
-        initialState={{
-          pagination: { paginationModel: { pageSize: 10 } },
-        }}
+        pageSize={5}
+        rowHeight={40}
         sx={{
-          height: '520px',
+          height: '100%',
           border: 0,
           flexGrow: 1,
           '& .MuiDataGrid-columnHeaders': {
@@ -95,13 +79,6 @@ function AdminUsers() {
           '& .MuiDataGrid-cell': {
             justifyContent: 'center',
             padding: '10px',
-          },
-          '& .MuiDataGrid-footerContainer': {
-            justifyContent: 'flex-end',
-            paddingRight: '1em',
-          },
-          '& .MuiDataGrid-cell--textLeft': {
-            textAlign: 'left',
           },
         }}
       />

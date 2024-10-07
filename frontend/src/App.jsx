@@ -10,6 +10,7 @@ import Login from './pages/Login';
 import ProtectedRoute from './components/ProtectedRoute';
 import { AuthProvider } from './contexts/AuthContext';
 import './App.css';
+import { UsersProvider } from './contexts/UsersContext';
 
 function App() {
   return (
@@ -21,12 +22,16 @@ function App() {
 
           {/* Protected Admin Routes */}
           <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
-            <Route path="/admin" element={<Admin />}>
-              <Route path="users" element={<AdminUsers />} />
-              <Route path="users/create" element={<CreateUser />} />
-              <Route path="users/view/:id" element={<ViewUser />} />
-              {/* Add other admin routes here */}
-            </Route>
+                <Route path="/admin" element={
+                  <UsersProvider>
+                    <Admin />
+                  </UsersProvider>
+              }>
+                  <Route path="users" element={<AdminUsers />} />
+                  <Route path="users/create" element={<CreateUser />} />
+                  <Route path="users/view/:id" element={<ViewUser />} />
+                  {/* Add other admin routes here */}
+                </Route>
           </Route>
 
           {/* Protected Agent Routes */}
