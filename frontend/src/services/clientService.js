@@ -46,7 +46,6 @@ const clientService = {
       const response = await axios.put(`${BASE_URL}/${clientId}`, clientData);
       return {
         success: true,
-        message: 'Client profile has been updated',
         data: response.data,
       };
     } catch (error) {
@@ -73,29 +72,12 @@ const clientService = {
     }
   },
 
-  // Get clients by agent ID
-  getClientsByAgentId: async (agentId) => {
-    try {
-      const response = await axios.get(`${BASE_URL}/agent/${agentId}`);
-      return {
-        success: true,
-        data: response.data,
-      };
-    } catch (error) {
-      return {
-        success: false,
-        message: error.response?.data || 'An error occurred while fetching clients for the agent',
-      };
-    }
-  },
-
   // Delete a client by ID
   deleteClient: async (clientId) => {
     try {
       const response = await axios.delete(`${BASE_URL}/${clientId}`);
       return {
         success: true,
-        message: 'Client with ClientID deleted successfully',
         data: response.data,
       };
     } catch (error) {
@@ -105,6 +87,23 @@ const clientService = {
       };
     }
   },
+
+  // Get clients by agent ID
+  getAgentClients: async (userId) => {
+    try {
+      const response = await axios.get(`${BASE_URL}/users/${userId}`);
+      return {
+        success: true,
+        data: response.data,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: error.response?.data || 'An error occurred while fetching agent clients',
+      };
+    }
+  },
+  
 };
 
 export default clientService;

@@ -35,22 +35,6 @@ const accountService = {
     }
   },
 
-  // Get accounts by client ID
-  getAccountsByClientId: async (clientId) => {
-    try {
-      const response = await axios.get(`${BASE_URL}/client/${clientId}`); // Unique endpoint for client accounts
-      return {
-        success: true,
-        data: response.data,
-      };
-    } catch (error) {
-      return {
-        success: false,
-        message: error.response?.data || 'An error occurred while fetching accounts for the client',
-      };
-    }
-  },
-
   // Delete an account by ID
   deleteAccount: async (accountId) => {
     try {
@@ -67,10 +51,10 @@ const accountService = {
     }
   },
 
-  // Bulk delete accounts by client ID
-  deleteAccountsByClientId: async (clientId) => {
+  // Get accounts by client ID
+  getClientAccounts: async (clientId) => {
     try {
-      const response = await axios.delete(`${BASE_URL}/client/${clientId}`); // Unique endpoint for bulk delete
+      const response = await axios.get(`${BASE_URL}/clients/${clientId}`);
       return {
         success: true,
         data: response.data,
@@ -78,10 +62,27 @@ const accountService = {
     } catch (error) {
       return {
         success: false,
-        message: error.response?.data || 'An error occurred while deleting accounts for the client',
+        message: error.response?.data || 'An error occurred while fetching accounts of the client',
       };
     }
   },
+
+  // Bulk delete accounts by client ID
+  deleteClientAccounts: async (clientId) => {
+    try {
+      const response = await axios.delete(`${BASE_URL}/clients/${clientId}`); // Unique endpoint for bulk delete
+      return {
+        success: true,
+        data: response.data,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: error.response?.data || 'An error occurred while deleting all client accounts',
+      };
+    }
+  },
+
 };
 
 export default accountService;

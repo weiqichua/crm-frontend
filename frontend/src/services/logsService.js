@@ -19,10 +19,10 @@ const logsService = {
     }
   },
 
-   // get agent logs
-   getAgentLogs:async (agentId) => {
+  // get logs relating to client
+  getUserLogs:async (userId) => {
     try {
-      const response = await axios.get(`${BASE_URL}/${agentId}`);
+      const response = await axios.get(`${BASE_URL}/users/${userId}`);
       return {
         sucess: true,
         data: response.data,
@@ -30,15 +30,15 @@ const logsService = {
     } catch (error) {
       return {
         success: false,
-        message: error.response?.data || 'An error occured when getting the client logs'
+        message: error.response?.data || 'An error occured when getting the user logs'
       }
     }
   },
 
-  // get agent logs
+  // get logs relating to client
   getClientLogs:async (clientId) => {
     try {
-      const response = await axios.get(`${BASE_URL}/${clientId}`);
+      const response = await axios.get(`${BASE_URL}/clients/${clientId}`);
       return {
         sucess: true,
         data: response.data,
@@ -51,10 +51,10 @@ const logsService = {
     }
   },
 
-  // get agent logs
+  // get logs relating to account
   getAccountLogs:async (accountId) => {
     try {
-      const response = await axios.get(`${BASE_URL}/${accountId}`);
+      const response = await axios.get(`${BASE_URL}/accounts/${accountId}`);
       return {
         sucess: true,
         data: response.data,
@@ -62,7 +62,7 @@ const logsService = {
     } catch (error) {
       return {
         success: false,
-        message: error.response?.data || 'An error occured when getting the client logs'
+        message: error.response?.data || 'An error occured when getting the account logs'
       }
     }
   },
