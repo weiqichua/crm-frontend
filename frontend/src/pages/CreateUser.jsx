@@ -1,11 +1,15 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Paper, TextField, Button, Typography, Box, MenuItem } from '@mui/material';
+import { useUsers } from '../contexts/UsersContext'; // Import the useUsers hook
+
 
 const roles = ['Admin', 'Agent']; // Example roles for the dropdown
 
 function CreateUser() {
+  const {users, setUsers } = useUsers();
   const navigate = useNavigate();
+
   const [user, setUser] = useState({
     firstName: '',
     lastName: '',
@@ -23,8 +27,15 @@ function CreateUser() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    const newUser = {
+      id: users.length + 1,
+      ...user,
+    }
+
+    setUsers((prevUsers) => [...prevUsers, newUser]);
     // Implement user creation logic here
     console.log('User created:', user);
+
     navigate('/admin/users');
   };
 
