@@ -22,7 +22,7 @@ export default function Layout() {
       <AppBar position="fixed">
         <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Typography variant="h6" noWrap component="div">
-            Welcome {user.role === 'admin' ? 'Admin' : 'Agent'} {user.username}
+            Welcome, {user.role === 'admin' ? 'Admin' : 'Agent'} {user.username}
           </Typography>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             <List sx={{ display: 'flex', flexDirection: 'row', p: 0, m: 0 }}>

@@ -2,7 +2,7 @@ import { Button, Box, Paper, Typography } from '@mui/material';
 import { useState } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import { useNavigate } from 'react-router-dom';
-import { useUsers } from '../contexts/UsersContext';
+import { useUsers } from '../contexts/useUsers';
 
 function AdminUsers() {
   const { users } = useUsers(); // Fetch users from context
@@ -64,7 +64,7 @@ function AdminUsers() {
         </Button>
       </Box>
       <DataGrid
-        rows={users}
+        rows={users.filter((user) => user.status !== 'disabled')}
         columns={columns}
         pageSize={10}
         page={page}

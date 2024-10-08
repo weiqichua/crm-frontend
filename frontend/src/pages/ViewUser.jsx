@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Paper, TextField, Button, Typography, Box, MenuItem, Divider } from '@mui/material';
-import { useUsers } from '../contexts/UsersContext';
-
-const roles = ['Admin', 'Agent'];
+import { Paper, TextField, Button, Typography, Box, Divider, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+import { useUsers } from '../contexts/useUsers';
 
 function ViewUser() {
   const { updateUserInList } = useUsers(); // Access update function from context
@@ -20,6 +18,7 @@ function ViewUser() {
 
   const [originalUser, setOriginalUser] = useState(null);
   const [isEditable, setIsEditable] = useState(false);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     if (location.state?.user) {
@@ -46,19 +45,34 @@ function ViewUser() {
     setIsEditable(false);
   };
 
+  const handleDisableClick = () => {
+    setOpen(true);
+  }
+
+  const handleDialogClose = () => {
+    setOpen(false);
+  }
+
   const handleDisableUser = () => {
-    console.log('User disabled:', user);
-    // Implement user disable logic here
+    const disabledUser = { ...user, status: 'disabled' };
+    updateUserInList(disabledUser);
+    navigate('/admin/users');
+    setOpen(false);
   };
 
   return (
     <Paper sx={{ padding: '2em', maxWidth: 800, margin: '2em auto' }}>
-      {/* Top Section with Back Button */}
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
+      {/* Top Section with Back and Use Details Buttons */}
+      <Box sx={{ display: 'flex', justifyContent: 'flex-start', gap: 2, mb: 2 }}>
         <Button variant="outlined" onClick={() => navigate(-1)}>
           Back
         </Button>
+        <Button variant="contained" color='secondary'>
+          User Details
+        </Button>
       </Box>
+
+      <Divider component="div" sx={{ mb: 2 }} />
 
       {/* User ID and Name */}
       <Box sx={{ mb: 2, display:'flex', flexDirection: 'row', gap: 2 }}>
@@ -102,22 +116,11 @@ function ViewUser() {
           required
         />
         <TextField
-          select
           label="Role"
           name="role"
           value={user.role}
-          onChange={handleChange}
-          InputProps={{
-            readOnly: !isEditable,
-          }}
-          required
-        >
-          {roles.map((role) => (
-            <MenuItem key={role} value={role}>
-              {role}
-            </MenuItem>
-          ))}
-        </TextField>
+          disabled={true}
+        />
         <TextField
           label="Email"
           name="email"
@@ -148,12 +151,29 @@ function ViewUser() {
             <Button variant="contained" color="primary" onClick={() => setIsEditable(true)}>
               Edit
             </Button>
-            <Button variant="contained" color="error" onClick={handleDisableUser}>
+            <Button variant="contained" color="error" onClick={handleDisableClick}>
               Disable User
             </Button>
           </>
         )}
       </Box>
+
+      {/* Confirmation Dialog */}
+      <Dialog open={open} onClose={handleDialogClose}>
+        <DialogTitle>Disable User</DialogTitle>
+        <DialogContent>
+          <Typography>Are you sure you want to disable this user?</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDialogClose} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleDisableUser} color="error" variant="contained">
+            Disable
+          </Button>
+        </DialogActions>
+      </Dialog>
+
     </Paper>
   );
 }

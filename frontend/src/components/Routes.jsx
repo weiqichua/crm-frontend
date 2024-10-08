@@ -5,10 +5,10 @@ import ReceiptIcon from '@mui/icons-material/Receipt';
 
 export const routesForAdmin = [
   { text: 'Users', path: '/admin/users', icon: <AddCircleOutlineIcon /> },
-  { text: 'Transactions', path: '/admin/transactions', icon: <ManageAccountsIcon /> },
+  { text: 'Logs', path: '/admin/logs', icon: <ManageAccountsIcon /> },
 ];
 
 export const routesForAgent = [
   { text: 'Clients', path: '/agent/clients', icon: <ReceiptIcon /> },
-  { text: 'Transactions', path: '/agent/transactions', icon: <ManageAccountsIcon /> },
+  { text: 'Logs', path: '/agent/logs', icon: <ManageAccountsIcon /> },
 ];

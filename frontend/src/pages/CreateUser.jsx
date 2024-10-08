@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Paper, TextField, Button, Typography, Box, MenuItem } from '@mui/material';
-import { useUsers } from '../contexts/UsersContext'; // Import the useUsers hook
+import { useUsers } from '../contexts/useUsers'; // Import the useUsers hook
 
 
 const roles = ['Admin', 'Agent']; // Example roles for the dropdown
