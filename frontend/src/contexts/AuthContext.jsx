@@ -2,8 +2,10 @@ import { createContext, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 const mockUsers = [
-  { username: 'admin', password: 'admin123', role: 'admin' },
-  { username: 'agent', password: 'agent123', role: 'agent' },
+  { id: 1, username: 'admin', password: 'admin123', role: 'admin' },
+  { id: 2, username: 'agentid2', password: 'agent123', role: 'agent' },
+  { id: 3, username: 'agentid3', password: 'agent123', role: 'agent' },
+  { id: 4, username: 'agentid4', password: 'agent123', role: 'agent' },
 ];
 
 export const AuthContext = createContext();

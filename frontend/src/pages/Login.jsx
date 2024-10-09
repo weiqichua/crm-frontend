@@ -15,10 +15,11 @@ function Login() {
     e.preventDefault();
     if (login(username, password)) {
       const user = JSON.parse(localStorage.getItem('user'))
-// console.log('Log in!');
-// console.log('User role:', user.role); 
-      navigate(`/${user.role}`);
-// console.log('Navigating in!');
+      if (user.role === 'admin') {
+        navigate('/admin');
+      } else {
+        navigate(`/agent`);
+      }
 
     } else {
       alert('Invalid credentials! Please try again');

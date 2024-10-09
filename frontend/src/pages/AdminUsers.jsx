@@ -1,8 +1,8 @@
-import { Button, Box, Paper, Typography } from '@mui/material';
+import { Button } from '@mui/material';
 import { useState } from 'react';
-import { DataGrid } from '@mui/x-data-grid';
 import { useNavigate } from 'react-router-dom';
 import { useUsers } from '../contexts/useUsers';
+import TablePaper from '../components/TablePaper'; // Import the TablePaper component
 
 function AdminUsers() {
   const { users } = useUsers(); // Fetch users from context
@@ -19,8 +19,9 @@ function AdminUsers() {
   const handleAddUserClick = () => {
     // Navigate to the create user page
     navigate('/admin/users/create');
-  };  
+  };
 
+  // Define columns for the DataGrid
   const columns = [
     { field: 'id', headerName: 'ID', width: 100 },
     { field: 'firstName', headerName: 'First Name', width: 150 },
@@ -32,63 +33,29 @@ function AdminUsers() {
       headerName: 'Actions',
       width: 150,
       renderCell: (params) => (
-        <Box sx={{ display: 'flex', justifyContent: 'flex-start', width: '100%' }}>
-          <Button
-            variant="contained"
-            size="small"
-            onClick={() => handleViewClick(params.row)}
-          >
-            View More
-          </Button>
-        </Box>
+        <Button
+          variant="contained"
+          size="small"
+          onClick={() => handleViewClick(params.row)}
+          sx = {{
+            marginBottom: 2
+          }}
+        >
+          View More
+        </Button>
       ),
     },
   ];
 
   return (
-    <Paper
-      sx={{
-        height: '80vh',
-        width: '100%',
-        margin: '0 auto',
-        display: 'flex',
-        flexDirection: 'column',
-      }}
-    >
-
-      {/* Add User Button Section */}
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', padding: '1rem' }}>
-        <Typography variant='h5'>Users</Typography>
-        <Button variant="contained" onClick={handleAddUserClick}>
-          Add User
-        </Button>
-      </Box>
-      <DataGrid
-        rows={users.filter((user) => user.status !== 'disabled')}
-        columns={columns}
-        pageSize={10}
-        page={page}
-        onPageChange={(newPage) => setPage(newPage)}
-        rowHeight={40}
-        initialState={{
-          pagination: { paginationModel: { pageSize: 10 } },
-        }}
-        sx={{
-          height: '520px',
-          border: 0,
-          flexGrow: 1,
-          '& .MuiDataGrid-columnHeaders': {
-            backgroundColor: '#f5f5f5',
-            fontSize: '1rem',
-            fontWeight: 'bold',
-          },
-          '& .MuiDataGrid-cell': {
-            justifyContent: 'center',
-            padding: '7px',
-          },
-        }}
-      />      
-    </Paper>
+    <TablePaper
+      title="Users"
+      rows={users.filter((user) => user.status !== 'disabled')}
+      columns={columns}
+      page={page}
+      setPage={setPage}
+      onAddClick={handleAddUserClick}
+    />
   );
 }
 
